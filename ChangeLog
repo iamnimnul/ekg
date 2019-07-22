@@ -13,6 +13,7 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
 - dostosowanie simlite.c do zmian w API OpenSSL (RSA_generate_key) (g)
 - zaktualizowanie dokumentacji dotycz±cej libgadu (g)
 - zmiana nazwy wersji snapshot z ,,SVN'' na ,,git'' (g)
+- usuniêcie nieu¿ywanej zmiennej level z commands.c (warning) (g)
 
 // 2015-11-03
 

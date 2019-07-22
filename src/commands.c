@@ -1666,7 +1666,6 @@ COMMAND(cmd_ignore)
 
 	} else {
 		int unignore_all = ((params[0] && !strcmp(params[0], "*")) ? 1 : 0);
-		int level;
 
 		if (!params[0]) {
 			printq("not_enough_params", name);
@@ -1702,7 +1701,7 @@ COMMAND(cmd_ignore)
 				if (!ignored_remove(u->uin))
 					x = 1;
 
-				level = ignored_check(u->uin);
+				ignored_check(u->uin);
 
 				if (uin == config_uin)
 					update_status();
@@ -1719,7 +1718,7 @@ COMMAND(cmd_ignore)
 			return 0;
 		}
 
-		level = ignored_check(uin);
+		ignored_check(uin);
 		
 		if (!ignored_remove(uin)) {
 			printq("ignored_deleted", format_user(uin));
