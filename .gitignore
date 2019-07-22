@@ -13,4 +13,7 @@ aclocal.m4
 .enable*
 .with*
 *.patch
-
+compat/*.o
+src/*.o
+src/.depend
+src/ekg
