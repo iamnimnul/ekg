@@ -180,11 +180,15 @@ char *sim_key_fingerprint(uint32_t uin)
 	RSA *key = sim_key_read(uin);
 	unsigned char md_value[EVP_MAX_MD_SIZE], *buf, *newbuf;
 	char *result = NULL;
-	EVP_MD_CTX ctx;
+	EVP_MD_CTX *ctx;
 	unsigned int md_len, size, i;
 
-	if (!key)
+	ctx = EVP_MD_CTX_new();
+	if (!ctx)
 		return NULL;
+
+	if (!key)
+		goto cleanup1;
 
 	if (uin)
 		size = i2d_RSAPublicKey(key, NULL);
@@ -193,30 +197,33 @@ char *sim_key_fingerprint(uint32_t uin)
 
 	if (!(newbuf = buf = malloc(size))) {
 		sim_errno = SIM_ERROR_MEMORY;
-		goto cleanup;
+		goto cleanup2;
 	}
 
 	if (uin)
 		size = i2d_RSAPublicKey(key, &newbuf);
 	else
 		size = i2d_RSAPrivateKey(key, &newbuf);
-	
-	EVP_DigestInit(&ctx, EVP_sha1());	
-	EVP_DigestUpdate(&ctx, buf, size);
-	EVP_DigestFinal(&ctx, md_value, &md_len);
+
+	EVP_DigestInit(ctx, EVP_sha1());
+	EVP_DigestUpdate(ctx, buf, size);
+	EVP_DigestFinal(ctx, md_value, &md_len);
 
 	free(buf);
 
 	if (!(result = malloc(md_len * 3))) {
 		sim_errno = SIM_ERROR_MEMORY;
-		goto cleanup;
+		goto cleanup2;
 	}
 
 	for (i = 0; i < md_len; i++)
 		snprintf(result + i * 3, (md_len * 3 - i * 3), (i != md_len - 1) ? "%.2x:" : "%.2x", md_value[i]);
 
-cleanup:
+cleanup2:
 	RSA_free(key);
+
+cleanup1:
+	EVP_MD_CTX_free(ctx);
 
 	return result;
 }

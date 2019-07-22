@@ -9,6 +9,7 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
 - przemianowanie configure.in na configure.ac, bo autogen.sh krzyczy (g)
 - dodanie kilku plików do .gitignore (g)
 - zmiana w Changelogu gophi na gof (g)
+- dostosowanie simlite.c do zmian w API OpenSSL (EVP_MD_CTX) (g)
 
 // 2015-11-03
 
