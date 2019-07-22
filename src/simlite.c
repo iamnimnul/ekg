@@ -82,14 +82,28 @@ int sim_key_generate(uint32_t uin)
 	RSA *keys = NULL;
 	int res = -1;
 	FILE *f = NULL;
+	BIGNUM *e = NULL;
 
 	if (!RAND_status())
 		sim_seed_prng();
 
-	if (!(keys = RSA_generate_key(1024, RSA_F4, NULL, NULL))) {
+	e = BN_new();
+	if (!e) {
 		sim_errno = SIM_ERROR_RSA;
 		goto cleanup;
 	}
+
+	keys = RSA_new();
+	if (!keys) {
+		sim_errno = SIM_ERROR_RSA;
+		goto cleanup;
+	}
+
+	BN_set_word(e, RSA_F4);
+	RSA_generate_key_ex(keys, 1024, e, NULL);
+
+	BN_free(e);
+	e = NULL;
 
 	snprintf(path, sizeof(path), "%s/%d.pem", sim_key_path, uin);
 
@@ -122,10 +136,14 @@ int sim_key_generate(uint32_t uin)
 	f = NULL;
 
 	res = 0;
-	
+
 cleanup:
 	if (keys)
 		RSA_free(keys);
+
+	if (e)
+		BN_free(e);
+
 	if (f)
 		fclose(f);
 
