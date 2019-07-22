@@ -4,6 +4,10 @@ oznacza, ¿e ,,nick'' jest pomys³odawc± lub podes³a³ patcha, a zrobi³
 to kto¶ oznaczony przez ,,x'' (w - wojtekka, s - speedy, a - arekm,
 d - drg, sz - szalik, del - deletek, g - gophi, p - porridge).
 
+// 2019-07-22
+
+- przemianowanie configure.in na configure.ac, bo autogen.sh krzyczy (g)
+
 // 2015-11-03
 
 - migracja z svn do gita (g)
