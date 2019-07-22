@@ -37,7 +37,7 @@ dep:
 
 #
 
-configure:	configure.in m4/*
+configure:	configure.ac m4/*
 	./autogen.sh
 
 #
