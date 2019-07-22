@@ -14,6 +14,7 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
 - zaktualizowanie dokumentacji dotycz±cej libgadu (g)
 - zmiana nazwy wersji snapshot z ,,SVN'' na ,,git'' (g)
 - usuniêcie nieu¿ywanej zmiennej level z commands.c (warning) (g)
+- usuniêcie wzmianki o lists.ziew.org, dodanie chmurka.ekg (g)
 
 // 2015-11-03
 

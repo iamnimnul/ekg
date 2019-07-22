@@ -331,15 +331,17 @@ ZG£ASZANIE B£ÊDÓW
     klienta, frontend czy co¶ takiego, daj znaæ -- odno¶nik do projektu
     zostanie umieszczony na stronie ekg.
 
-LISTA DYSKUSYJNA
+GRUPA DYSKUSYJNA
 
-    Istnieje lista dyskusyjna dla u¿ytkowników ekg o adresie 
-    ekg-users@lists.ziew.org. Aby siê zapisaæ, nale¿y wej¶æ na 
-    stronê o adresie:
+    Na serwerze news.chmurka.net istnieje prywatna grupa dyskusyjna chmurka.ekg, 
+    po¶wiêcona aplikacji. Dane serwera:
 
-	http://lists.ziew.org/mailman/listinfo/ekg-users
+        Adres: news.chmurka.net
+        U¿ytkownik: ekg
+        Has³o: ekg
 
-    oraz postêpowaæ wed³ug instrukcji tam zawartych.
+    Aby siê zapisaæ, nale¿y skorzystaæ z czytnika grup dyskusyjnych (nntp), 
+    np. pine / alpine, Pan, tin, slrn.
 
 AUTORZY
 
