@@ -1,29 +1,23 @@
 // $Id$
-// (C) 2007-2008 Adam Wysocki <gophi@ekg.chmurka.net>
+// (C) 2007-2008, 2019 Adam Wysocki <gophi@ekg.chmurka.net>
 
 Od 5 lipca 2007 biblioteka libgadu, odpowiedzialna za komunikacjê, oraz 
-klient ekg, rozwijane i rozpowszechniane s± oddzielnie. ¯eby zainstalowaæ
-ekg, nale¿y najpierw zainstalowaæ libgadu.
+klient ekg, rozwijane i rozpowszechniane s± oddzielnie. ¯eby zainstalowaæ 
+ekg, nale¿y najpierw zainstalowaæ libgadu. Uproszczona procedura:
 
-- Je¿eli korzystasz ze snapshotów (pobra³e¶ ekg ze strony www):
-  - cd libgadu
-    (bêd±c w katalogu z ekg)
-  - ./configure
-    (opcjonalne parametry, jak --prefix=katalog-domowy)
-  - make
-  - make install
-    (je¿eli instalujesz systemowo, to z uprawnieniami roota)
+- git clone https://github.com/wojtekka/libgadu.git
+- cd libgadu
+- ./autogen.sh
+  (opcjonalne parametry, jak --prefix=katalog-domowy)
+- make
+- make install
+  (je¿eli instalujesz systemowo, to z uprawnieniami roota)
 
-- Je¿eli korzystasz z SVN:
-  - svn co http://toxygen.net/svn/libgadu/trunk libgadu
-  - cd libgadu
-  - ./autogen.sh 
-    (opcje jak przy ./configure)
-  - make
-  - make install
+Z niestandardowych rzeczy procedura ta wymaga instalacji libtool oraz 
+protobuf-c-compiler.
 
-Je¿eli nie zainstalowa³e¶ libgadu systemowo (tylko np. w katalogu 
-domowym), to przed wykonaniem ./configure w katalogu ekg musisz 
+Je¿eli nie zainstalowa³e¶ libgadu systemowo, tylko np. w katalogu 
+domowym, to przed wykonaniem ./configure w katalogu ekg musisz 
 podaæ ¶cie¿kê do plików nag³ówkowych oraz biblioteki libgadu:
 
 ./configure "CFLAGS=-I ¶cie¿ka_do_include -pthread" "LDFLAGS=-L ¶cie¿ka_do_lib"
@@ -43,7 +37,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/libgadu/lib
 
 Najlepiej wstawiæ t± linijkê do .bashrc lub odpowiedniego pliku 
 uruchamianego przez pow³okê przy starcie (w zale¿no¶ci od pow³oki 
-eksportowanie zmiennych mo¿e odbywaæ siê w inny sposób - nale¿y 
-sprawdziæ w dokumentacji pow³oki).
+eksportowanie zmiennych mo¿e odbywaæ siê w inny sposób).
 
-Pytania, skargi i wnioski: http://ekg.chmurka.net/kontakt.php
+Informacje na temat biblioteki libgadu oraz stabilne wydania znajduj± siê 
+na stronie: https://libgadu.net/

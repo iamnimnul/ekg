@@ -11,6 +11,7 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
 - zmiana w Changelogu gophi na gof (g)
 - dostosowanie simlite.c do zmian w API OpenSSL (EVP_MD_CTX) (g)
 - dostosowanie simlite.c do zmian w API OpenSSL (RSA_generate_key) (g)
+- zaktualizowanie dokumentacji dotycz±cej libgadu (g)
 
 // 2015-11-03
 
