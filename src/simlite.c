@@ -184,6 +184,10 @@ static RSA *sim_key_read(uint32_t uin)
 	return key;
 }
 
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#define NEW_OPENSSL_API
+#endif
+
 /*
  * sim_key_fingerprint()
  *
@@ -198,15 +202,20 @@ char *sim_key_fingerprint(uint32_t uin)
 	RSA *key = sim_key_read(uin);
 	unsigned char md_value[EVP_MAX_MD_SIZE], *buf, *newbuf;
 	char *result = NULL;
-	EVP_MD_CTX *ctx;
 	unsigned int md_len, size, i;
+	EVP_MD_CTX *ctx;
 
+#ifdef NEW_OPENSSL_API
 	ctx = EVP_MD_CTX_new();
 	if (!ctx)
 		return NULL;
+#else
+	EVP_MD_CTX ctx2;
+	ctx = &ctx2;
+#endif
 
 	if (!key)
-		goto cleanup1;
+		goto cleanup;
 
 	if (uin)
 		size = i2d_RSAPublicKey(key, NULL);
@@ -215,7 +224,7 @@ char *sim_key_fingerprint(uint32_t uin)
 
 	if (!(newbuf = buf = malloc(size))) {
 		sim_errno = SIM_ERROR_MEMORY;
-		goto cleanup2;
+		goto cleanup;
 	}
 
 	if (uin)
@@ -231,17 +240,19 @@ char *sim_key_fingerprint(uint32_t uin)
 
 	if (!(result = malloc(md_len * 3))) {
 		sim_errno = SIM_ERROR_MEMORY;
-		goto cleanup2;
+		goto cleanup;
 	}
 
 	for (i = 0; i < md_len; i++)
 		snprintf(result + i * 3, (md_len * 3 - i * 3), (i != md_len - 1) ? "%.2x:" : "%.2x", md_value[i]);
 
-cleanup2:
-	RSA_free(key);
+cleanup:
+	if (key)
+		RSA_free(key);
 
-cleanup1:
+#ifdef NEW_OPENSSL_API
 	EVP_MD_CTX_free(ctx);
+#endif
 
 	return result;
 }
