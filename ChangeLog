@@ -10,6 +10,8 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
   wczorajszych zmian (Marcin Miros³aw/g)
 - dodanie sprawdzania dla systemów, w których libncurses i libtinfo
   s± rozdzielone (Marcin Miros³aw/g)
+- dorzucenie patcha od Marcina Miros³awa na configure.ac, ¿eby u¿ywaæ
+  LIBS zamiast LDFLAGS (Marcin Miros³aw/g)
 
 // 2019-07-22
 
