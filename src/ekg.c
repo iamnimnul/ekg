@@ -107,7 +107,7 @@ static volatile sig_atomic_t do_exit = 0;
 static volatile sig_atomic_t do_handle_sigusr1 = 0;
 static volatile sig_atomic_t do_handle_sigusr2 = 0;
 
-static char sigsegv_msg[1024];
+static char sigsegv_msg[8192];
 
 /*
  * usuwanie sesji GG_SESSION_USERx. wystarczy zwolniæ.
@@ -557,7 +557,7 @@ void ekg_wait_for_key()
 
 		/* auto save */
 		if (config_auto_save && config_changed && time(NULL) - last_save > config_auto_save) {
-			gg_debug(GG_DEBUG_MISC, "-- autosaving userlist and config after %d seconds.\n", time(NULL) - last_save);
+			gg_debug(GG_DEBUG_MISC, "-- autosaving userlist and config after %lld seconds.\n", (long long) time(NULL) - last_save);
 			last_save = time(NULL);
 
 			if (!userlist_write(0) && !config_write(NULL)) {

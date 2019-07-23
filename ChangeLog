@@ -12,6 +12,7 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
   s± rozdzielone (Marcin Miros³aw/g)
 - dorzucenie patcha od Marcina Miros³awa na configure.ac, ¿eby u¿ywaæ
   LIBS zamiast LDFLAGS (Marcin Miros³aw/g)
+- naprawa czê¶ci ostrze¿eñ (g³ównie pointer signedness) (g)
 
 // 2019-07-22
 

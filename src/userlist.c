@@ -588,18 +588,10 @@ struct userlist *userlist_add(uin_t uin, const char *display)
  */
 int userlist_remove(struct userlist *u, int full)
 {
-	int metagroups = 0;
 	list_t l;
 
 	if (!u)
 		return -1;
-
-	for (l = u->groups; l; l = l->next) {
-		struct group *g = l->data;
-
-		if (!strncmp(g->name, "__", 2))
-			metagroups = 1;
-	}
 
 	if (!full && (group_member(u, "__blocked") || ignored_check(u->uin))) {
 		xfree(u->first_name); u->first_name = NULL;

@@ -147,12 +147,12 @@ void print_message(struct gg_event *e, struct userlist *u, int chat, int secure)
 		else
 			attrmap = "nTgGbBrR";
 
-		formatmap = xcalloc(1, strlen(e->event.msg.message));
-		
+		formatmap = xcalloc(1, strlen((const char *) e->event.msg.message));
+
 		for (i = 0; i < e->event.msg.formats_length; ) {
 			int pos = p[i] + p[i + 1] * 256;
 
-			if (pos >= strlen(e->event.msg.message)) {
+			if (pos >= strlen((const char *) e->event.msg.message)) {
 				xfree(formatmap);
 				formatmap = NULL;
 				break;
@@ -174,7 +174,7 @@ void print_message(struct gg_event *e, struct userlist *u, int chat, int secure)
 		 * nowej linii i odstêpy. dziêki temu oszczêdzamy sobie
 		 * mieszania ni¿ej w kodzie. */
 
-		for (i = 0; formatmap && i < strlen(e->event.msg.message); i++) {
+		for (i = 0; formatmap && i < strlen((const char *) e->event.msg.message); i++) {
 			if (formatmap[i])
 				last_attr = formatmap[i];
 
@@ -289,7 +289,7 @@ void print_message(struct gg_event *e, struct userlist *u, int chat, int secure)
 
 	/* je¿eli chcemy, dodajemy do bufora ,,last'' wiadomo¶æ... */
 	if (config_last & 3 && (chat >= 0 && chat <= 2))
-	       last_add(0, e->event.msg.sender, tt, e->event.msg.time, e->event.msg.message);
+	       last_add(0, e->event.msg.sender, tt, e->event.msg.time, (const char *) e->event.msg.message);
 	
 	strftime(timestr, sizeof(timestr), format_find(timestamp), tm);
 
@@ -335,7 +335,7 @@ void print_message(struct gg_event *e, struct userlist *u, int chat, int secure)
 	}
 
 	buf = xmalloc(mem_width);
-	mesg = save = (strlen(e->event.msg.message) > 0) ? xstrdup(e->event.msg.message) : xstrdup(" ");
+	mesg = save = (strlen((const char *) e->event.msg.message) > 0) ? xstrdup((const char *) e->event.msg.message) : xstrdup(" ");
 
 	for (i = 0; i < strlen(mesg); i++)	/* XXX ³adniejsze taby */
 		if (mesg[i] == '\t')
@@ -527,7 +527,7 @@ void handle_msg(struct gg_event *e)
 		}
 
 		/* ignorujemy wiadomo¶ci bez tre¶ci zawieraj±ce jedynie obrazek(ki) */
-		if (config_ignore_empty_msg && imageno && strlen(e->event.msg.message) == 0) {
+		if (config_ignore_empty_msg && imageno && strlen((const char *) e->event.msg.message) == 0) {
 			list_destroy(images, 1);
 			return;
 		}
@@ -538,7 +538,7 @@ void handle_msg(struct gg_event *e)
 		char *msg = sim_message_decrypt(e->event.msg.message, e->event.msg.sender);
 
 		if (msg) {
-			strlcpy(e->event.msg.message, msg, strlen(e->event.msg.message) + 1);
+			strlcpy((char *) e->event.msg.message, msg, strlen((const char *) e->event.msg.message) + 1);
 			xfree(msg);
 			secure = 1;
 		} else
@@ -618,7 +618,7 @@ void handle_msg(struct gg_event *e)
 	list_destroy(images, 1);
 
 #ifdef HAVE_OPENSSL
-	if (config_encryption && !strncmp(e->event.msg.message, "-----BEGIN RSA PUBLIC KEY-----", 20)) {
+	if (config_encryption && !strncmp((const char *) e->event.msg.message, "-----BEGIN RSA PUBLIC KEY-----", 20)) {
 		char *name;
 		const char *target = ((u && u->display) ? u->display : itoa(e->event.msg.sender));
 		FILE *f;
@@ -663,8 +663,8 @@ void handle_msg(struct gg_event *e)
 	put_log(e->event.msg.sender, "%s,%ld,%s,%s,%s,%s\n", (chat) ? "chatrecv" : "msgrecv", e->event.msg.sender, ((u && u->display) ? u->display : ""), log_timestamp(time(NULL)), log_timestamp(e->event.msg.time), e->event.msg.message);
 
 	if (!(ignored_check(e->event.msg.sender) & IGNORE_EVENTS))
-		event_check((chat) ? EVENT_CHAT : EVENT_MSG, e->event.msg.sender, e->event.msg.message);
-			
+		event_check((chat) ? EVENT_CHAT : EVENT_MSG, e->event.msg.sender, (const char *) e->event.msg.message);
+
 	if (config_sms_away && (GG_S_B(config_status) || (GG_S_I(config_status) && config_sms_away & 4)) && config_sms_app && config_sms_number) {
 		if (!(ignored_check(e->event.msg.sender) & IGNORE_SMSAWAY)) {
 			char *foo, sender[100];
@@ -677,7 +677,7 @@ void handle_msg(struct gg_event *e)
 				else
 					snprintf(sender, sizeof(sender), "%u", e->event.msg.sender);
 
-				if (config_sms_max_length && strlen(e->event.msg.message) > config_sms_max_length)
+				if (config_sms_max_length && strlen((const char *) e->event.msg.message) > config_sms_max_length)
 					e->event.msg.message[config_sms_max_length] = 0;
 
 				if (e->event.msg.recipients_count)
@@ -688,7 +688,7 @@ void handle_msg(struct gg_event *e)
 				/* niech nie wysy³a smsów, je¶li brakuje formatów */
 				if (strcmp(foo, ""))
 					send_sms(config_sms_number, foo, 0);
-		
+
 				xfree(foo);
 			}
 		}
@@ -964,8 +964,8 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 			event_check(EVENT_BLOCKED, uin, NULL);
 	}
 
-	if (!descr) 
-		descr = xstrdup(idescr);
+	if (!descr)
+		descr = (unsigned char *) xstrdup(idescr);
 
 	/* zapamiêtaj adres, port i protokó³ */
 	if (__USER_QUITING) {
@@ -990,7 +990,7 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 	
 	/* je¶li stan z opisem, a opisu brak, wpisz pusty tekst */
 	if (GG_S_D(status) && !descr)
-		descr = xstrdup("");
+		descr = (unsigned char *) xstrdup("");
 
 	if (descr) {
 		unsigned char *tmp;
@@ -998,7 +998,7 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 		for (tmp = descr; *tmp; tmp++) {
 			/* usuwamy \r, interesuje nas tylko \n w opisie */
 			if (*tmp == 13)
-				memmove(tmp, tmp + 1, strlen(tmp));
+				memmove(tmp, tmp + 1, strlen((const char *) tmp));
 			/* tabulacja na spacje */
 			if (*tmp == 9)
 				*tmp = ' ';
@@ -1010,7 +1010,7 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 		cp_to_iso(descr);
 	}
 
-	if (GG_S_D(status) && (u->status == status) && u->descr && !strcmp(u->descr, descr)) {
+	if (GG_S_D(status) && (u->status == status) && u->descr && !strcmp(u->descr, (const char *) descr)) {
 		xfree(descr);
 		return;
 	}
@@ -1041,14 +1041,14 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 #define __SAME_GG_S(x, y)	((GG_S_A(x) && GG_S_A(y)) || (GG_S_B(x) && GG_S_B(y)) || (GG_S_I(x) && GG_S_I(y)) || (GG_S_NA(x) && GG_S_NA(y)))
 
 		if (!ignore_events && (!config_events_delay || (time(NULL) - last_conn_event) >= config_events_delay)) {
-			if ((descr && u->descr && strcmp(descr, u->descr)) || (!u->descr && descr))
-				event_check(EVENT_DESCR, uin, descr);
+			if ((descr && u->descr && strcmp((const char *) descr, u->descr)) || (!u->descr && descr))
+				event_check(EVENT_DESCR, uin, (const char *) descr);
 
 			if (!__SAME_GG_S(prev_status, status)) {
 				if (!ignore_status && GG_S_NA(prev_status) && GG_S_A(s->status))
-					event_check(EVENT_ONLINE, uin, descr);
+					event_check(EVENT_ONLINE, uin, (const char *) descr);
 				else
-					event_check(s->event, uin, descr);
+					event_check(s->event, uin, (const char *) descr);
 			}
 		}
 
@@ -1124,7 +1124,7 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 			
 		/* no dobra, poka¿ */
 		if (u->display || have_unknown) {
-			char *tmp = xstrdup(descr), *p;
+			char *tmp = xstrdup((const char *) descr), *p;
 			char *target, *display;
 
 			for (p = tmp; p && *p; p++) {
@@ -1156,7 +1156,7 @@ void handle_common(uin_t uin, int status, const char *idescr, int dtime, uint32_
 	if (!ignore_status) {
 		u->status = status;
 		xfree(u->descr);
-		u->descr = descr;
+		u->descr = (char *) descr;
 		ui_event("status", u->uin, ((u->display) ? u->display : ""), status, (ignore_status_descr) ? NULL : u->descr);
 	 } else
 		xfree(descr);
@@ -2147,7 +2147,7 @@ void handle_userlist(struct gg_event *e)
 						gg_remove_notify_ex(sess, u->uin, userlist_type(u));
 				}
 
-				cp_to_iso(e->event.userlist.reply);
+				cp_to_iso((unsigned char *) e->event.userlist.reply);
 				userlist_set(e->event.userlist.reply, userlist_get_config);
 				userlist_send();
 				update_status();
@@ -2384,7 +2384,7 @@ void handle_dcc(struct gg_dcc *d)
 			gg_debug(GG_DEBUG_MISC, "## GG_EVENT_DCC_CLIENT_ACCEPT\n");
 			
 			if (!(u = userlist_find(d->peer_uin, NULL)) || config_uin != d->uin) {
-				gg_debug(GG_DEBUG_MISC, "## unauthorized client (uin=%ld), closing connection\n", d->peer_uin);
+				gg_debug(GG_DEBUG_MISC, "## unauthorized client (uin=%u), closing connection\n", d->peer_uin);
 				list_remove(&watches, d, 0);
 				gg_free_dcc(d);
 				return;
@@ -2447,7 +2447,7 @@ void handle_dcc(struct gg_dcc *d)
 					char *remote;
 
 					remote = xstrdup(t->filename);
-					iso_to_cp(remote);
+					iso_to_cp((unsigned char *) remote);
 
 					if (gg_dcc_fill_file_info2(d, remote, t->filename) == -1) {
 						gg_debug(GG_DEBUG_MISC, "## gg_dcc_fill_file_info() failed (%s)\n", strerror(errno));
@@ -2487,8 +2487,8 @@ void handle_dcc(struct gg_dcc *d)
 			fix_filename(d->file_info.filename);
 
 			t->type = GG_SESSION_DCC_GET;
-			t->filename = xstrdup(d->file_info.filename);
-			cp_to_iso(t->filename);
+			t->filename = xstrdup((const char *) d->file_info.filename);
+			cp_to_iso((unsigned char *) t->filename);
 
 			print("dcc_get_offer", format_user(t->uin), t->filename, itoa(d->file_info.size), itoa(t->id));
 
@@ -2941,10 +2941,10 @@ void handle_search50(struct gg_event *e)
 
 		const char *target = NULL;
 
-		cp_to_iso(firstname);
-		cp_to_iso(lastname);
-		cp_to_iso(nickname);
-		cp_to_iso(city);
+		cp_to_iso((unsigned char *) firstname);
+		cp_to_iso((unsigned char *) lastname);
+		cp_to_iso((unsigned char *) nickname);
+		cp_to_iso((unsigned char *) city);
 
 		if (count == 1 && !all) {
 			xfree(last_search_first_name);
@@ -3081,14 +3081,14 @@ void handle_image_reply(struct gg_event *e)
 			int fd;
 			ssize_t rs;
 
-			fname = xstrdup(e->event.image_reply.filename);
+			fname = (unsigned char *) xstrdup(e->event.image_reply.filename);
 			fix_filename(fname);
 			cp_to_iso(fname);
 
 			if (config_dcc_dir)
-				path = saprintf("%s/%s", config_dcc_dir, fname);
+				path = (unsigned char *) saprintf("%s/%s", config_dcc_dir, fname);
 			else
-				path = xstrdup(fname);
+				path = (unsigned char *) xstrdup((const char *) fname);
 
 			tmp = unique_name(path);
 			if (!tmp) {
@@ -3102,7 +3102,7 @@ void handle_image_reply(struct gg_event *e)
 
 			gg_debug(GG_DEBUG_MISC, "// ekg: trying to save image: %s\n", path);
 
-			fd = open(path, O_WRONLY | O_CREAT, config_files_mode_received);
+			fd = open((const char *) path, O_WRONLY | O_CREAT, config_files_mode_received);
 			if (fd == -1)
 				goto err;
 
@@ -3110,12 +3110,12 @@ void handle_image_reply(struct gg_event *e)
 			if (rs == -1) {
 				int xerrno = errno;
 				close(fd);
-				unlink(path);
+				unlink((const char *) path);
 				errno = xerrno;
 				goto err;
 			} else if (rs != e->event.image_reply.size) {
 				close(fd);
-				unlink(path);
+				unlink((const char *) path);
 				errno = ENOSPC;
 				goto err;
 			}
@@ -3123,14 +3123,14 @@ void handle_image_reply(struct gg_event *e)
 			if (fsync(fd) == -1) {
 				int xerrno = errno;
 				close(fd);
-				unlink(path);
+				unlink((const char *) path);
 				errno = xerrno;
 				goto err;
 			}
 
 			if (close(fd) == -1) {
 				int xerrno = errno;
-				unlink(path);
+				unlink((const char *) path);
 				errno = xerrno;
 				goto err;
 			}
@@ -3138,7 +3138,7 @@ void handle_image_reply(struct gg_event *e)
 			print("image_saved", format_user(e->event.image_reply.sender), path);
 			xfree(path);
 
-			event_check(EVENT_IMAGE, e->event.image_reply.sender, fname);
+			event_check(EVENT_IMAGE, e->event.image_reply.sender, (const char *) fname);
 			xfree(fname);
 			return;
 
@@ -3194,7 +3194,7 @@ err:
 	if (u && group_member(u, "spied")) {
 		if (GG_S_NA(u->status)) {
 			int status = (GG_S_D(u->status)) ? GG_STATUS_INVISIBLE_DESCR : GG_STATUS_INVISIBLE;
-			iso_to_cp(u->descr);
+			iso_to_cp((unsigned char *) u->descr);
 			handle_common(u->uin, status, u->descr, time(NULL), u->ip.s_addr, u->port, u->protocol, u->image_size);
 		}
 	} else {
@@ -3239,9 +3239,9 @@ void handle_dcc7_new(struct gg_event *e)
 			char *path;
 
 			t.type = GG_SESSION_DCC7_GET;
-			t.filename = xstrdup(dcc->filename);
-			cp_to_iso(t.filename);
-			fix_filename(t.filename);
+			t.filename = xstrdup((const char *) dcc->filename);
+			cp_to_iso((unsigned char *) t.filename);
+			fix_filename((unsigned char *) t.filename);
 
 			print("dcc_get_offer", format_user(t.uin), t.filename, itoa(dcc->size), itoa(t.id));
 
