@@ -3878,7 +3878,7 @@ COMMAND(cmd_test_imagemsg)
 		return -1;
 	}
 
-	gg_debug(GG_DEBUG_MISC, "// sizeof(off_t) = %d\n", sizeof(off_t));
+	gg_debug(GG_DEBUG_MISC, "// sizeof(off_t) = %zu\n", sizeof(off_t));
 	size = lseek(fd, 0, SEEK_END);
 	lseek(fd, 0, SEEK_SET);
 

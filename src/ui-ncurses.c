@@ -2886,7 +2886,7 @@ static void mouse_bevent_statusbar (struct mouse_coords_t *coords, mmask_t bstat
 		area = ACT;
 		act_pos = coords->x - mouse_statusbar.act_c[0].x;
 		if (act_pos >= strlen(mouse_statusbar.act_str))	{
-			gg_debug(GG_DEBUG_MISC, "// mouse_statusbar_bevent(): Sanity check engaged: %d >= %d\n", act_pos, strlen(mouse_statusbar.act_str));
+			gg_debug(GG_DEBUG_MISC, "// mouse_statusbar_bevent(): Sanity check engaged: %d >= %zu\n", act_pos, strlen(mouse_statusbar.act_str));
 			return;
 		}
 	} else {
