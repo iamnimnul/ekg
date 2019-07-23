@@ -6,7 +6,10 @@ d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
 
 // 2019-07-23
 
-- naprawa kompatybilno¶ci z OpenSSL < 1.1.0 zepsutej przy okazji wczorajszych zmian (g)
+- naprawa kompatybilno¶ci z OpenSSL < 1.1.0 zepsutej przy okazji
+  wczorajszych zmian (Marcin Miros³aw/g)
+- dodanie sprawdzania dla systemów, w których libncurses i libtinfo
+  s± rozdzielone (Marcin Miros³aw/g)
 
 // 2019-07-22
 

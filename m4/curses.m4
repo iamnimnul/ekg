@@ -61,6 +61,10 @@ AC_DEFUN([AC_CHECK_NCURSES],
 				[
 					CURSES_LIBS="$libs -lncurses"
 					have_libncurses=yes
+					AC_CHECK_LIB(tinfo, cbreak)
+					[
+						CURSES_LIBS+=" -ltinfo"
+					]
 				], [
 					AC_CHECK_LIB(curses, initscr,
 					[
