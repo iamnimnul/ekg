@@ -1251,8 +1251,12 @@ void handle_failure(struct gg_event *e)
 		{ GG_FAILURE_PASSWORD, "conn_failed_password" },
 		{ GG_FAILURE_404, "conn_failed_404" },
 		{ GG_FAILURE_TLS, "conn_failed_tls" },
+		{ GG_FAILURE_NEED_EMAIL, "conn_failed_need_email " },
 		{ GG_FAILURE_INTRUDER, "conn_failed_intruder" },
 		{ GG_FAILURE_UNAVAILABLE, "conn_failed_unavailable" },
+		{ GG_FAILURE_PROXY, "conn_failed_proxy" },
+		{ GG_FAILURE_HUB, "conn_failed_hub" },
+		{ GG_FAILURE_INTERNAL, "conn_failed_internal" },
 		{ 0, NULL }
 	};
 

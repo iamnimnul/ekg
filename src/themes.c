@@ -1113,9 +1113,13 @@ void theme_init()
 	format_add("conn_failed_password", "Nieprawid³owe has³o", 1);
 	format_add("conn_failed_404", "B³±d serwera HTTP", 1);
 	format_add("conn_failed_tls", "B³±d negocjacji TLS", 1);
+	format_add("conn_failed_need_email", "Serwer prosi o zmianê adresu e-mail", 1);
 	format_add("conn_failed_memory", "Brak pamiêci", 1);
 	format_add("conn_failed_intruder", "Zbyt wiele prób po³±czenia z nieprawid³owym has³em", 1);
 	format_add("conn_failed_unavailable", "Serwery GG s± teraz wy³±czone. Spróbuj pó¼niej", 1);
+	format_add("conn_failed_proxy", "B³±d serwera po¶rednicz±cego", 1);
+	format_add("conn_failed_hub", "B³±d po³±czenia z hubem", 1);
+	format_add("conn_failed_internal", "B³±d wewnêtrzny biblioteki libgadu", 1);
 	format_add("conn_stopped", "%! Przerwano ³±czenie\n", 1);
 	format_add("conn_timeout", "%! Przekroczono limit czasu operacji ³±czenia z serwerem\n", 1);
 	format_add("connected", "%> Po³±czono\n", 1);
