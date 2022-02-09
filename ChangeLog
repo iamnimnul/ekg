@@ -4,6 +4,10 @@ oznacza, ¿e ,,nick'' jest pomys³odawc± lub podes³a³ patcha, a zrobi³
 to kto¶ oznaczony przez ,,x'' (w - wojtekka, s - speedy, a - arekm,
 d - drg, sz - szalik, del - deletek, g - gof, p - porridge).
 
+// 2022-01-09
+
+- poprawienie kompilacji na gcc 10+ (g)
+
 // 2021-03-06
 
 - dodanie nowych kodów b³êdów po³±czenia z libgadu (k4be/g)

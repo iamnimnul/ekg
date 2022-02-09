@@ -31,7 +31,7 @@ dnl
 AC_PROG_CC
 
 if test "$GCC"; then 
-	CFLAGS="$CFLAGS -Wall"
+	CFLAGS="$CFLAGS -Wall -fcommon"
 dnl	echo "Whoa!, GNU CC, -Wall"
 fi
 
